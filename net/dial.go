@@ -101,6 +101,12 @@ func dial(ctx context.Context, addr string, op dialOptions) (c net.Conn, err err
 			}
 		}
 		return dialer.DialContext(ctx, "tcp", addr)
+	case "unix":
+		dialer := &net.Dialer{
+			Timeout:   op.timeout,
+			KeepAlive: op.keepAlive,
+		}
+		return dialer.DialContext(ctx, op.protocol, addr)
 	case "kcp":
 		return dialKCPServer(addr)
 	default:
